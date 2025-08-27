@@ -1,7 +1,6 @@
 import {
   createBrowserRouter,
   Navigate,
-  replace,
   useLocation,
 } from "react-router-dom";
 import { LoginPage } from "@/pages/auth/Login";
@@ -14,9 +13,9 @@ import { NotFoundPage } from "@/pages/NotFound";
 import { getMe } from "@/features/auth/api";
 import type { ReactNode } from "react";
 
-async function AuthRequired({ children }: { children: ReactNode }) {
+function AuthRequired({ children }: { children: ReactNode }) {
   const location = useLocation();
-  const me: any = await getMe();
+  const me: any = getMe();
   return me.authenticated ? (
     <>{children}</>
   ) : (
