@@ -4,3 +4,8 @@ import type { LoginFormData } from "@/types/schemas";
 export async function login(user: LoginFormData) {
   await http.post("/auth/login", user);
 }
+
+export async function getMe() {
+  const result = await http.get("/auth/me");
+  return result;
+}
