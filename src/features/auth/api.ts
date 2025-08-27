@@ -5,7 +5,7 @@ export async function login(user: LoginFormData) {
   await http.post("/auth/login", user);
 }
 
-export async function getMe() {
+export async function getMe<T>() {
   const result = await http.get("/auth/me");
-  return result;
+  return result.data as T;
 }
