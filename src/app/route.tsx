@@ -1,9 +1,4 @@
-import {
-  createBrowserRouter,
-  Navigate,
-  replace,
-  useLocation,
-} from "react-router-dom";
+import { createBrowserRouter, Navigate, useLocation } from "react-router-dom";
 import { LoginPage } from "@/pages/auth/Login";
 import AuthLayout from "@/components/UI/layouts/AuthLayout";
 import { RegisterPage } from "@/pages/auth/Register";
@@ -12,12 +7,23 @@ import { HomePage } from "@/pages/Home";
 import { DashboardPage } from "@/pages/tenant/Dashboard";
 import { NotFoundPage } from "@/pages/NotFound";
 import { getMe } from "@/features/auth/api";
-import type { ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 
-async function AuthRequired({ children }: { children: ReactNode }) {
+type AuthResponse = {
+  authenticated: boolean;
+};
+
+function AuthRequired({ children }: { children: ReactNode }) {
+  const [auth, setAuth] = useState<AuthResponse>({ authenticated: false });
   const location = useLocation();
-  const me: any = await getMe();
-  return me.authenticated ? (
+  useEffect(() => {
+    const func = async () => {
+      const data = await getMe<AuthResponse>();
+      setAuth(data);
+    };
+    func();
+  }, []);
+  return auth.authenticated ? (
     <>{children}</>
   ) : (
     <Navigate to="/login" replace state={{ from: location }} />
